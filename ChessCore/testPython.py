@@ -1,12 +1,10 @@
 
-#This is a comment.
 """
-This is a comment
-written in
-more than just one line
+This was written by a cool guy named Jose Gamboa
 """
 
 import chess.pgn
+import csv
 
 class ChessMiner:
     def __init__(self, fileName):
@@ -28,13 +26,25 @@ class ChessMiner:
         else:
             return self.games
 
+    def createCSV(self):
+        with open('/Users/josegamboa/Documents/GitHub/ChessAnalytics/ChessCore/data/MyChessDB.csv', 'w') as csvfile:
+            filewriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            filewriter.writerow(["Event","Date","White","Black","Result","BlackElo","WhiteElo","ECO"])
+            for game in self.games:
+                if game != None:
+                    csvData = [
+                        game.headers["Event"], 
+                        game.headers["Date"],
+                        game.headers["White"],
+                        game.headers["Black"],
+                        game.headers["Result"],
+                        game.headers["BlackElo"],
+                        game.headers["WhiteElo"],
+                        game.headers["ECO"]]
 
+                filewriter.writerow(csvData)
 
-#miner = ChessMiner("data/pgn/anastasian-lewis.pgn")
-miner = ChessMiner("data/pgn/pablo.pgn")
-#miner = ChessMiner("data/pgn/kasparov-deep-blue-1997.pgn")
-
+#miner = ChessMiner("/data/pgn/pablo.pgn")
+miner = ChessMiner("/Users/josegamboa/Documents/GitHub/ChessAnalytics/ChessCore/data/pgn/pablo.pgn")
 miner.loadGames()
-
-print(len(miner.games))
-print("hola")
+miner.createCSV()
